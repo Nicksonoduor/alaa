@@ -1,4 +1,4 @@
-﻿[app]
+[app]
 
 title = TikTok Comment Downloader
 package.name = tiktokscraper
