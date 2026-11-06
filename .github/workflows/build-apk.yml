@@ -1,0 +1,58 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: Lock Runner to Python 3.11.5
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.5'
+
+      - name: Verify Python Version is 3.11.5
+        run: |
+          which python
+          python --version
+
+      - name: Cache Buildozer Directories
+        uses: actions/cache@v4
+        with:
+          path: |
+            .buildozer
+            ~/.buildozer
+          key: buildozer-py3115-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+
+      - name: Install Linux System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            git zip unzip openjdk-17-jdk \
+            autoconf libtool pkg-config zlib1g-dev \
+            libncurses5-dev libncursesw5-dev libtinfo5 \
+            cmake libffi-dev libssl-dev automake \
+            libltdl-dev patch libsqlite3-dev libbz2-dev liblzma-dev
+
+      - name: Install Buildozer and Cython 0.29.36
+        run: |
+          python -m pip install --upgrade pip "setuptools<70.0.0" wheel
+          python -m pip install "cython==0.29.36" buildozer
+
+      - name: Build APK with Buildozer
+        run: |
+          buildozer android debug
+
+      - name: Upload Compiled APK as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TikTok-Comment-Downloader-APK
+          path: bin/*.apk
