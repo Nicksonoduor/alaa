@@ -17,9 +17,9 @@ jobs:
       - name: Lock Runner to Python 3.11.5
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11.5'
+          python-version: '3.12'
 
-      - name: Verify Python Version is 3.11.5
+      - name: Verify Python Version is 3.12
         run: |
           which python
           python --version
