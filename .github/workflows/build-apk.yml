@@ -56,3 +56,5 @@ jobs:
         with:
           name: TikTok-Comment-Downloader-APK
           path: bin/*.apk
+      - name: Clean corrupted p4a venv
+        run: rm -rf .buildozer/android/platform/build-*/build/venv
