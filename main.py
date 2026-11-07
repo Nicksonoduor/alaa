@@ -83,6 +83,9 @@ def export_to_public_downloads(private_file_path, public_filename):
     ContentValues = autoclass('android.content.ContentValues')
     MediaStore = autoclass('android.provider.MediaStore$Downloads')
     Environment = autoclass('android.os.Environment')
+    
+    # Load JavaInteger to fix the export type mismatch
+    JavaInteger = autoclass('java.lang.Integer')
 
     activity = PythonActivity.mActivity
     if activity is None:
@@ -94,7 +97,9 @@ def export_to_public_downloads(private_file_path, public_filename):
     values.put("_display_name", public_filename)
     values.put("mime_type", "text/csv")
     values.put("relative_path", Environment.DIRECTORY_DOWNLOADS + "/")
-    values.put("is_pending", 1)
+    
+    # Cast Python integer to Java Integer
+    values.put("is_pending", JavaInteger(1))
 
     uri = resolver.insert(MediaStore.EXTERNAL_CONTENT_URI, values)
     if uri is None:
@@ -117,7 +122,10 @@ def export_to_public_downloads(private_file_path, public_filename):
         output_stream = None
 
         published_values = ContentValues()
-        published_values.put("is_pending", 0)
+        
+        # Cast Python integer to Java Integer
+        published_values.put("is_pending", JavaInteger(0))
+        
         if resolver.update(uri, published_values, None, None) != 1:
             raise OSError("Android could not finish publishing the exported CSV.")
     except Exception:
