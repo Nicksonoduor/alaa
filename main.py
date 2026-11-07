@@ -24,6 +24,37 @@ from kivy.utils import platform
 from kivy.config import Config
 Config.set('kivy', 'window_icon', 'icon.png')
 
+
+from kivy.utils import platform
+
+if platform == 'android':
+    from jnius import autoclass
+    from android.runnable import run_on_ui_thread
+
+    @run_on_ui_thread
+    def set_system_bars_colors():
+        Color = autoclass("android.graphics.Color")
+        WindowManager = autoclass("android.view.WindowManager$LayoutParams")
+        activity = autoclass("org.kivy.android.PythonActivity").mActivity
+        window = activity.getWindow()
+
+        # Allow the app to draw the backgrounds for the system bars
+        window.addFlags(WindowManager.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.clearFlags(WindowManager.FLAG_TRANSLUCENT_STATUS)
+        
+        # Set the top and bottom bars to White to match your KivyMD Light theme
+        window.setStatusBarColor(Color.WHITE)
+        window.setNavigationBarColor(Color.WHITE)
+        
+        # Make the system icons (time, battery, navigation buttons) dark
+        # 8192 = SYSTEM_UI_FLAG_LIGHT_STATUS_BAR, 16 = SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        window.getDecorView().setSystemUiVisibility(8192 | 16)
+
+
+
+
+
+
 # ... rest of your imports
 def get_video_id(url_or_id):
     url_or_id = url_or_id.strip()
@@ -148,6 +179,13 @@ def export_to_public_downloads(private_file_path, public_filename):
 
 class TikTokScraperApp(MDApp):
     dialog = None
+    def on_start(self):
+        # Blend the top and bottom Android system bars
+        if platform == 'android':
+            set_system_bars_colors()
+            
+        # Automatically load files when the app opens
+        self.refresh_file_list()
 
     def build(self):
         self.theme_cls.primary_palette = "Red"
