@@ -7,8 +7,10 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,wav
 version = 1.0
 
-requirements = python3,kivy,kivymd=1.2.0,pillow,requests,urllib3,charset-normalizer,chardet,idna,certifi,openssl,pyjnius,android
+requirements = python3,kivy,kivymd==1.2.0,pillow,requests,urllib3,charset-normalizer,chardet,idna,certifi,openssl,pyjnius,android
 icon.filename = %(source.dir)s/icon.png
+
+presplash.filename = %(source.dir)s/icon.png
 orientation = portrait
 fullscreen = 0
 
