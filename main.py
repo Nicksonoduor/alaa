@@ -20,7 +20,11 @@ from kivymd.uix.button import MDFlatButton
 
 
 from kivy.utils import platform
+# --- ADD THESE TWO LINES HERE ---
+from kivy.config import Config
+Config.set('kivy', 'window_icon', 'icon.png')
 
+# ... rest of your imports
 def get_video_id(url_or_id):
     url_or_id = url_or_id.strip()
     if url_or_id.isdigit():
