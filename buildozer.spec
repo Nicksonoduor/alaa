@@ -12,7 +12,7 @@ icon.filename = %(source.dir)s/icon.png
 android.presplash_color = #1C2026
 presplash.filename = %(source.dir)s/presplash.png
 orientation = portrait
-fullscreen = 0
+fullscreen = 1
 
 android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 android.api = 34
